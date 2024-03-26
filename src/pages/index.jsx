@@ -224,10 +224,23 @@ export default function HomePage() {
                   </button>
                 ) : (
                   <>
-                    <button disabled={!sendTransaction} onClick={() => sendTransaction?.()}>
+                    {selectedCurrency === "native" ? (
+                    <>
+                      <button disabled={!sendTransaction} onClick={() => sendTransaction?.()}>
                       Buy with ETH
                     </button>
                     {isSuccess && <div> Success!</div>}
+                    </>
+                  ):(
+                    <>
+                    <button disabled={!sendTransaction} onClick={() => USDT_ETH_Transfer?.()}>
+                      Buy with USDT
+                    </button>
+                    </>
+                  )}
+                    
+                  </>
+                )}
                   </>
                 )}
               </>
@@ -284,10 +297,23 @@ export default function HomePage() {
                   </button>
                 ) : (
                   <>
-                    <button disabled={!sendTransaction} onClick={() => sendTransaction?.()}>
+                    {selectedCurrency === "native" ? (
+                    <>
+                      <button disabled={!sendTransaction} onClick={() => sendTransaction?.()}>
                       Buy with Matic
                     </button>
                     {isSuccess && <div> Success!</div>}
+                    </>
+                  ):(
+                    <>
+                    <button disabled={!sendTransaction} onClick={() => USDT_POL_Transfer?.()}>
+                      Buy with USDT
+                    </button>
+                    </>
+                  )}
+                    
+                  </>
+                )}
                   </>
                 )}
               </>
