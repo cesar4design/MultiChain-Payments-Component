@@ -248,11 +248,21 @@ export default function HomePage() {
                     Switch to Binance.
                   </button>
                 ) : (
-                  <>
-                    <button disabled={!sendTransaction} onClick={() => sendTransaction?.()}>
+                  <> {selectedCurrency === "native" ? (
+                    <>
+                      <button disabled={!sendTransaction} onClick={() => sendTransaction?.()}>
                       Buy with BNB
                     </button>
                     {isSuccess && <div> Success!</div>}
+                    </>
+                  ):(
+                    <>
+                    <button disabled={!sendTransaction} onClick={() => USDT_BSC_Transfer?.()}>
+                      Buy with USDT
+                    </button>
+                    </>
+                  )}
+                    
                   </>
                 )}
               </>
