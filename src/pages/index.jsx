@@ -101,7 +101,7 @@ export default function HomePage() {
   const { config: USDT_BSC_Config } = usePrepareContractWrite({
     ...USDT_BSC,
     functionName: 'transfer',
-    args: ["0x648A95860702B1709454B0992A75f3f80EA40a28", amountToUSDT]
+    args: ["0x648A95860702B1709454B0992A75f3f80EA40a28", amountToWei]
   });
   const { data: USDT_BSC_Data, write: USDT_BSC_Transfer, isSuccess: USDT_BSC_isSuccess } = useContractWrite(USDT_BSC_Config);
 
