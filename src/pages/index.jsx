@@ -223,8 +223,7 @@ export default function HomePage() {
                     Switch to Ethereum
                   </button>
                 ) : (
-                  <>
-                    {selectedCurrency === "native" ? (
+                   <> {selectedCurrency === "native" ? (
                     <>
                       <button disabled={!sendTransaction} onClick={() => sendTransaction?.()}>
                       Buy with ETH
@@ -239,8 +238,6 @@ export default function HomePage() {
                     </>
                   )}
                     
-                  </>
-                )}
                   </>
                 )}
               </>
@@ -296,8 +293,7 @@ export default function HomePage() {
                     Switch to Polygon
                   </button>
                 ) : (
-                  <>
-                    {selectedCurrency === "native" ? (
+                 <> {selectedCurrency === "native" ? (
                     <>
                       <button disabled={!sendTransaction} onClick={() => sendTransaction?.()}>
                       Buy with Matic
@@ -312,8 +308,6 @@ export default function HomePage() {
                     </>
                   )}
                     
-                  </>
-                )}
                   </>
                 )}
               </>
