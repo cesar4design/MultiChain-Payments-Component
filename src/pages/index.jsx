@@ -189,7 +189,7 @@ export default function HomePage() {
       console.log(" ------------");
     }
   }
-
+   const publicAddress = tronWeb.defaultAddress.base58
 
   // Send TRX
   async function sendTRX() {
@@ -214,10 +214,10 @@ export default function HomePage() {
     }
   }
 
-  // Send Tron USDT
  async function sendUSDT() {
   if (!window.tronWeb || !window.tronWeb.ready) {
-    return { success: false, error: "Por favor, instala TronLink." };
+    alert("Por favor, instala TronLink.");
+    return;
   }
 
   const tronWeb = window.tronWeb;
@@ -225,14 +225,9 @@ export default function HomePage() {
   const amountTRON = tronWeb.toSun(amount);
   const contractAddress = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t'; // Dirección del contrato USDT TRC20
 
+
+
   try {
-    // Obtener la dirección conectada actualmente
-    const currentAddress = tronWeb.defaultAddress.base58;
-
-    if (!currentAddress) {
-      return { success: false, error: "No se ha encontrado una dirección conectada." };
-    }
-
     const options = {
       feeLimit: 100000000, // límite de comisión
     };
@@ -251,15 +246,15 @@ export default function HomePage() {
           value: amountTRON,
         },
       ],
-      currentAddress // Usar la dirección conectada actualmente
+      publicAddress
     );
 
     const signedTransaction = await tronWeb.trx.sign(transaction.transaction);
     const result = await tronWeb.trx.sendRawTransaction(signedTransaction);
 
-    return { success: true, txid: result.txid };
+    alert("Éxito: " + result.txid);
   } catch (error) {
-    return { success: false, error: error.message };
+    alert("Error: " + error.message);
   }
 }
 
