@@ -216,27 +216,48 @@ export default function HomePage() {
 
   // Send Tron USDT
   async function sendUSDT() {
-    if (!window.tronWeb || !window.tronWeb.ready) {
-      alert("Please, install TronLink.");
-      return;
-    }
-
-    const tronWeb = window.tronWeb;
-    const receiver = 'TMDKznuDWaZwfZHcM61FVFstyYNmK6Njk1';
-    const amountTRON = tronWeb.toSun(amount)
-
-
-    try {
-      const transaction = await tronWeb.transactionBuilder.sendToken(receiver, amountTRON, 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t');
-
-      const signedTransaction = await tronWeb.trx.sign(transaction);
-      const result = await tronWeb.trx.sendRawTransaction(signedTransaction);
-
-      alert("Exit: " + result.txid);
-    } catch (error) {
-      alert("Error: " + error.message);
-    }
+  if (!window.tronWeb || !window.tronWeb.ready) {
+    alert("Por favor, instala TronLink.");
+    return;
   }
+
+  const tronWeb = window.tronWeb;
+  const receiver = 'TMDKznuDWaZwfZHcM61FVFstyYNmK6Njk1';
+  const amountTRON = tronWeb.toSun(amount);
+  const contractAddress = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t'; // Dirección del contrato USDT TRC20
+
+  try {
+    const options = {
+      feeLimit: 100000000, // límite de comisión
+    };
+
+    const transaction = await tronWeb.transactionBuilder.triggerSmartContract(
+      contractAddress,
+      'transfer(address,uint256)',
+      options,
+      [
+        {
+          type: tronWeb.ParameterType.address,
+          value: receiver,
+        },
+        {
+          type: tronWeb.ParameterType.uint256,
+          value: amountTRON,
+        },
+      ],
+      tronWeb.defaultAddress.base58
+    );
+
+    const signedTransaction = await tronWeb.trx.sign(transaction.transaction);
+    const result = await tronWeb.trx.sendRawTransaction(signedTransaction);
+
+    alert("Éxito: " + result.txid); // Imprimir el número de hash de la transacción
+    console.log("Número de Hash de Transacción:", result.txid); // Imprimir el número de hash en la consola
+  } catch (error) {
+    alert("Error: " + error.message);
+  }
+}
+
 
 
   function connectTronLink() {
