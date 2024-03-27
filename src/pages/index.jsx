@@ -215,10 +215,9 @@ export default function HomePage() {
   }
 
   // Send Tron USDT
-  async function sendUSDT() {
+ async function sendUSDT() {
   if (!window.tronWeb || !window.tronWeb.ready) {
-    alert("Por favor, instala TronLink.");
-    return;
+    return { success: false, error: "Por favor, instala TronLink." };
   }
 
   const tronWeb = window.tronWeb;
@@ -227,6 +226,13 @@ export default function HomePage() {
   const contractAddress = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t'; // Dirección del contrato USDT TRC20
 
   try {
+    // Obtener la dirección conectada actualmente
+    const currentAddress = tronWeb.defaultAddress.base58;
+
+    if (!currentAddress) {
+      return { success: false, error: "No se ha encontrado una dirección conectada." };
+    }
+
     const options = {
       feeLimit: 100000000, // límite de comisión
     };
@@ -245,18 +251,18 @@ export default function HomePage() {
           value: amountTRON,
         },
       ],
-      tronWeb.defaultAddress.base58
+      currentAddress // Usar la dirección conectada actualmente
     );
 
     const signedTransaction = await tronWeb.trx.sign(transaction.transaction);
     const result = await tronWeb.trx.sendRawTransaction(signedTransaction);
 
-    alert("Éxito: " + result.txid); // Imprimir el número de hash de la transacción
-    console.log("Número de Hash de Transacción:", result.txid); // Imprimir el número de hash en la consola
+    return { success: true, txid: result.txid };
   } catch (error) {
-    alert("Error: " + error.message);
+    return { success: false, error: error.message };
   }
 }
+
 
 
 
