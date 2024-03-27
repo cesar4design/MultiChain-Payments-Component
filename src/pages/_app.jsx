@@ -16,28 +16,78 @@ const WalletProvider = dynamic(
 );
 // ------- End Solana Config ------- //
 
+
+
+// ------- Start EVM Config ------- //
+import { createWeb3Modal } from '@web3modal/wagmi/react'
+import { walletConnectProvider, EIP6963Connector } from '@web3modal/wagmi'
+import { WagmiConfig, configureChains, createConfig } from 'wagmi'
+import { publicProvider } from 'wagmi/providers/public'
+import { mainnet, polygon, sepolia, bsc } from 'viem/chains'
+import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
+import { InjectedConnector } from 'wagmi/connectors/injected'
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
+
+const projectId = '6b3b6a75fab4c023e92097eab4b3c923'
+
+// 2. Create wagmiConfig
+const { chains, publicClient } = configureChains(
+  [polygon, mainnet, bsc],
+  [walletConnectProvider({ projectId }), publicProvider()]
+)
+
+const metadata = {
+  name: '',
+  description: '',
+  url: '',
+  icons: ['']
+}
+
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors: [
+    new WalletConnectConnector({ chains, options: { projectId, showQrModal: false, metadata } }),
+    new EIP6963Connector({ chains }),
+  ],
+  publicClient
+})
+
+createWeb3Modal({
+  wagmiConfig, projectId, includeWalletIds: [
+    'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96'
+  ],
+  themeMode: 'light', chains
+})
+// ------- End EVM Config ------- //
+
+
+
+
 export default function App({ Component, pageProps }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     setReady(true);
   }, []);
-
   return (
     <>
       <Helmet>
-        <title>Solana transfer</title>
+        <title>Buy multi chain</title>
         <link rel="icon" href="/Logo.png" />
       </Helmet>
 
       {ready ? (
-        
+        <WagmiConfig config={wagmiConfig}>
           <ConnectionProvider endpoint={endpoint}>
             <WalletProvider>
+
+
               <Component {...pageProps} />
+
+
             </WalletProvider>
           </ConnectionProvider>
-        
+        </WagmiConfig>
       ) : null}
 
     </>
